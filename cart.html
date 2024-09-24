@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>e-commerce website</title>
+
+    <!-- font-awesome cdn link -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+
+    <!-- custom css file link -->
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <section id="page-header" class="about-header">
+        <h2>#cart</h2>
+        <p>Add your coupon code & SAVE upto 70%!</p>
+    </section>
+
+    <section id="cart" class="section-p1">
+        <table width="100%">
+            <thead>
+                <tr>
+                    <td>Remove</td>
+                    <td>Image</td>
+                    <td>Product</td>
+                    <td>Price</td>
+                    <td>Quantity</td>
+                    <td>Subtotal</td>
+                </tr>
+            </thead>
+            <tbody id="cart-items">
+                <!-- Cart items will be dynamically added here -->
+            </tbody>
+        </table>
+    </section>
+
+    <section id="cart-add" class="section-p1">
+        <div class="coupon">
+            <h3>Apply Coupon</h3>
+            <div>
+                <input type="text" placeholder="Enter Your Coupon">
+                <button class="normal">Apply</button>
+            </div>
+        </div>
+        <div class="subtotal">
+            <h3>Cart Totals</h3>
+            <table>
+                <tr>
+                    <td>Cart Subtotal</td>
+                    <td id="cart-subtotal">KES 0</td>
+                </tr>
+                <tr>
+                    <td>Shipping</td>
+                    <td>Free</td>
+                </tr>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td id="cart-total"><strong>KES 0</strong></td>
+                </tr>
+            </table>
+            <button class="normal" id="checkout-button">Proceed to checkout</button>
+        </div>
+    </section>
+
+    <footer class="section-p1">
+        <!-- ... (keep the existing footer content) ... -->
+    </footer>
+
+    <!-- javascript script file link -->
+    <script src="script.js"></script>
+    <script>
+        // Function to render cart items
+        function renderCart() {
+            const cartItems = document.getElementById('cart-items');
+            const cartSubtotal = document.getElementById('cart-subtotal');
+            const cartTotal = document.getElementById('cart-total');
+            
+            cartItems.innerHTML = '';
+            let subtotal = 0;
+
+            cart.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><a href="#" onclick="removeItem(${index})"><i class="fas fa-times-circle" style="color:black"></i></a></td>
+                    <td><img src="${item.image}" alt="${item.name}"></td>
+                    <td>${item.name}</td>
+                    <td>KES ${item.price}</td>
+                    <td><input type="number" value="${item.quantity}" onchange="updateQuantity(${index}, this.value)"></td>
+                    <td>KES ${item.price * item.quantity}</td>
+                `;
+                cartItems.appendChild(row);
+                subtotal += item.price * item.quantity;
+            });
+
+            cartSubtotal.textContent = `KES ${subtotal}`;
+            cartTotal.textContent = `KES ${subtotal}`;
+        }
+
+        // Function to remove item from cart
+        function removeItem(index) {
+            cart.splice(index, 1);
+            saveCart();
+            renderCart();
+            updateCartIcon();
+        }
+
+        // Function to update item quantity
+        function updateQuantity(index, quantity) {
+            cart[index].quantity = parseInt(quantity);
+            saveCart();
+            renderCart();
+            updateCartIcon();
+        }
+
+        // Render cart on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCart();
+            updateCartIcon();
+
+            // Add event listener to checkout button
+            document.getElementById('checkout-button').addEventListener('click', checkout);
+        });
+    </script>
+</body>
+
+</html>
